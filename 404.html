@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0f4d6e">
+<title>Page not found · Beryl Directory</title>
+<link rel="icon" type="image/png" href="https://msegonia.github.io/beryl-directory/icons/icon-192.png">
+<style>
+  /* Beryl's own look (her choice, Option A): blue "Grade 8 BERYL" top, card below; light and dark like the app */
+  :root{--ink:#0d2f42;--ink-2:#48677a;--brand:#1b6f96;--on-brand:#fff;--mast:#0f4d6e;--paper:#fff;--ground:#eef6fa;--line:#d3e4ec;color-scheme:light dark}
+  @media (prefers-color-scheme: dark){:root{--ink:#e2f0f7;--ink-2:#a3bfcf;--brand:#7cc9ec;--on-brand:#05202e;--mast:#0f3f5a;--paper:#11222d;--ground:#0a1820;--line:#20374a}}
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;background:var(--ground);color:var(--ink);font-family:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-size:17px;line-height:1.45}
+  .mast{background:var(--mast);color:#fff;padding:22px 20px 70px;padding-top:calc(22px + env(safe-area-inset-top,0px));position:relative;overflow:hidden}
+  .mast::after{content:"";position:absolute;right:-60px;top:-40px;width:260px;height:300px;background:linear-gradient(160deg,rgba(127,209,193,.28),rgba(127,209,193,0));-webkit-clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)}
+  .mast small{display:block;color:#cfe7dd;font-size:17px;margin-bottom:6px;position:relative;z-index:1}
+  .mast b{display:block;font-size:56px;line-height:.95;letter-spacing:-.02em;position:relative;z-index:1}
+  main{max-width:440px;margin:-44px auto 0;padding:0 14px 40px;position:relative;z-index:2}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:26px 24px}
+  .big{font-size:52px;font-weight:700;line-height:1;letter-spacing:-.02em}
+  h1{margin:10px 0 6px;font-size:24px;line-height:1.2}
+  p{margin:0 0 10px;color:var(--ink-2)}
+  a.btn{display:block;margin-top:18px;padding:14px;border-radius:999px;background:var(--brand);color:var(--on-brand);text-align:center;font-weight:700;text-decoration:none}
+</style>
+</head>
+<body>
+  <div class="mast"><small>Grade 8</small><b>BERYL</b></div>
+  <main>
+    <div class="card">
+      <div class="big">404</div>
+      <h1>This page isn’t in Beryl</h1>
+      <p>The address may be mistyped, or the page was moved.</p>
+      <a class="btn" href="https://msegonia.github.io/beryl-directory/">Open Beryl Directory</a>
+    </div>
+  </main>
+</body>
+</html>

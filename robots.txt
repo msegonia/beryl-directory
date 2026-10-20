@@ -1,0 +1,5 @@
+# Beryl Directory is a private class app. Please don't list it in search results.
+# (Search engines read this file only at the top of a domain, so it starts working once Beryl has its own domain.
+#  Until then, the "noindex" line inside index.html does the same job.)
+User-agent: *
+Disallow: /
