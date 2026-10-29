@@ -1,7 +1,8 @@
 // Beryl website helper (browsers and "Add to Home Screen" only; the Android app doesn't use it).
 // Beryl itself: the newest copy from the internet first, the saved copy when there's no internet.
 // Nothing from the Google Sheet (grades, messages, photos) is ever saved here.
-var CACHE = 'beryl-web-2';
+// Update 30: shows Beryl's notifications on iPhones (Home Screen app, iOS 16.4+). The signal never holds message text.
+var CACHE = 'beryl-web-3';
 var PAGE = './';
 var FILES = [PAGE, 'icons/icon-192.png', 'icons/apple-touch-icon.png', 'manifest.webmanifest'];
 
@@ -43,4 +44,51 @@ self.addEventListener('fetch', function (e) {
     return;
   }
   e.respondWith(caches.match(req, { ignoreSearch: true }).then(function (r) { return r || fetch(req); }));
+});
+
+// ---- Notifications (iPhone Home Screen app) ----
+// The same words as the Android app. An iPhone must show a notification for every signal, so there is always one.
+function noteFor(d) {
+  var teacher = d.r === 't';
+  if (d.type === 'msg') {
+    if (teacher) return { title: 'New message from a student', body: 'Open Beryl to read it.', tag: 'beryl-msg' };
+    if (d.ann === '1') return { title: 'You got an announcement from your class adviser.', body: 'Open Beryl to read it.', tag: 'beryl-msg' };
+    return { title: 'You got a message from your class adviser.', body: 'Open Beryl to read it.', tag: 'beryl-msg' };
+  }
+  if (d.type === 'grades') {
+    var t = d.what === 'g' ? 'Your grades are updated.' : d.what === 'a' ? 'Your attendance is updated.'
+      : d.what === 'ga' ? 'Your grades and attendance are updated.' : 'Your grades or attendance were updated.';
+    return { title: t, body: 'Open Beryl to see them.', tag: 'beryl-grades' };
+  }
+  if (d.type === 'checkin') return { title: "Check in for today's class.", body: 'Open Beryl and tap Check in.', tag: 'beryl-checkin' };
+  if (d.type === 'test') return { title: 'Beryl notifications are working \u2713', body: teacher ? 'This came instantly, through Firebase.' : '', tag: 'beryl-test' };
+  return { title: 'Beryl', body: 'Open Beryl to see what\u2019s new.', tag: 'beryl' };
+}
+
+self.addEventListener('push', function (e) {
+  var p = {};
+  try { p = e.data ? e.data.json() : {}; } catch (x) { p = {}; }
+  var d = (p && p.data) || p || {};
+  var n = noteFor(d);
+  e.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function (list) {
+      list.forEach(function (c) { try { c.postMessage({ beryl: 'push', type: d.type || '' }); } catch (x) {} }); // Beryl is open: check now
+    }).catch(function () {}).then(function () {
+      return self.registration.showNotification(n.title, { body: n.body, tag: n.tag, icon: 'icons/icon-192.png', data: { type: d.type || '' } });
+    })
+  );
+});
+
+self.addEventListener('notificationclick', function (e) {
+  e.notification.close();
+  var type = (e.notification.data && e.notification.data.type) || '';
+  var scope = self.registration.scope;
+  e.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function (list) {
+      for (var i = 0; i < list.length; i++) {
+        if ('focus' in list[i]) { try { list[i].postMessage({ beryl: 'open', type: type }); } catch (x) {} return list[i].focus(); }
+      }
+      return self.clients.openWindow(scope + (type === 'msg' ? '?open=msg' : ''));
+    })
+  );
 });
