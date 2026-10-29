@@ -61,6 +61,9 @@ function noteFor(d) {
     return { title: t, body: 'Open Beryl to see them.', tag: 'beryl-grades' };
   }
   if (d.type === 'checkin') return { title: "Check in for today's class.", body: 'Open Beryl and tap Check in.', tag: 'beryl-checkin' };
+  if (d.type === 'attday') return d.st === 'in'
+    ? { title: "Today's attendance is in.", body: "The class secretary sent today's attendance.", tag: 'beryl-att' }
+    : { title: 'No attendance from the class secretary yet.', body: "Open Beryl to check today's attendance.", tag: 'beryl-att' };
   if (d.type === 'test') return { title: 'Beryl notifications are working \u2713', body: teacher ? 'This came instantly, through Firebase.' : '', tag: 'beryl-test' };
   return { title: 'Beryl', body: 'Open Beryl to see what\u2019s new.', tag: 'beryl' };
 }
